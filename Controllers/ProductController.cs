@@ -46,6 +46,7 @@ namespace MwTesting.Controllers
             return Ok(temp);
         }
         [HttpPut("{id}")]
+        
         public ActionResult<Product> UpdateProduct(int id, ProductUpdateDto product)
         {
             var item = productAc.GetProductById(id);
@@ -69,7 +70,7 @@ namespace MwTesting.Controllers
             productAc.SaveChanges();
             return Ok();
         }
-
+       
 
     }
 }

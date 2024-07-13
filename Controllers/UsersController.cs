@@ -22,10 +22,16 @@ namespace MwTesting.Controllers
             {
                 return Unauthorized();
             }
-            Console.WriteLine("User : "+user.Name);
+            Console.WriteLine("User : " + user.Name);
+            var role = new Roles();
+
+            var currentUserRole = user.Role == role.Admin ? role.Admin : role.User;
+            Console.WriteLine("Role : " + currentUserRole);
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenDescriptor = new SecurityTokenDescriptor
             {
+
+
                 Issuer = jwtOptions.Issuer,
                 Audience = jwtOptions.Audience,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SigningKey))
@@ -33,7 +39,8 @@ namespace MwTesting.Controllers
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new(ClaimTypes.Name,user.Name)
+                    new(ClaimTypes.Name,user.Name),
+                    new(ClaimTypes.Role,currentUserRole)
                 })
             };
             var securityToken = tokenHandler.CreateToken(tokenDescriptor);

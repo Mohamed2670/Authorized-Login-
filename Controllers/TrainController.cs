@@ -55,6 +55,7 @@ namespace MwTesting.Controllers
         }
         [HttpDelete("{id}")]
         public ActionResult DeleteUser(int id)
+
         {
             var item = userAc.GetUserById(id);
             if (item == null)
@@ -64,6 +65,20 @@ namespace MwTesting.Controllers
             userAc.DeleteUser(item);
             userAc.SaveChanges();
             return Ok();
+        }
+
+
+        [HttpPut("updateRole/{id}")]
+        [Authorize(Policy = "SuperUser")]
+        public ActionResult<User> UpdateRole(int id, string role)
+        {
+            var item = userAc.GetUserById(id);
+            role = role != "Admin" && role != "User" ? "User" : role;
+            if (item == null)
+                return NotFound();
+            item.Role = role;
+            userAc.SaveChanges();
+            return Ok(item);
         }
 
     }

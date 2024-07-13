@@ -26,7 +26,12 @@ builder.Services.AddControllers(options =>
     options.Filters.Add<PermissionBasedAuthFilter>();
     // to add more global filters
 });
-
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("SuperUser", builder =>
+    { builder.RequireRole("Admin"); }
+    );
+});
 var jwtOptions = builder.Configuration.GetSection("jwt").Get<JwtOptions>();
 builder.Services.AddSingleton(jwtOptions);
 builder.Services.AddAuthentication()
